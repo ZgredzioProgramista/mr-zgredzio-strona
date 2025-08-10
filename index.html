@@ -8,7 +8,8 @@
   <link rel="canonical" href="https://www.mr-zgredzio.pl/">
   <style>
     :root { --bg:#0f172a; --panel:#111827; --text:#e5e7eb; --muted:#94a3b8; --accent:#22c55e; }
-    *{box-sizing:border-box} body{margin:0;font-family:system-ui,Segoe UI,Roboto,Inter,Arial;background:var(--bg);color:var(--text)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,Segoe UI,Roboto,Inter,Arial;background:var(--bg);color:var(--text)}
     .wrap{max-width:960px;margin:0 auto;padding:24px}
     header{display:flex;justify-content:space-between;align-items:center;gap:16px}
     .card{background:var(--panel);border-radius:16px;padding:24px;margin-top:24px}
@@ -16,12 +17,23 @@
     @media (min-width:900px){ .grid{grid-template-columns:1.2fr .8fr} }
     h1{margin:0 0 8px;font-size:clamp(28px,4vw,40px)}
     p{margin:0 0 12px;color:var(--muted)}
-    .btn{display:inline-flex;align-items:center;gap:10px;background:#1f2937;border:1px solid #334155;
-         color:var(--text);padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:600}
+
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      background:#1f2937;border:1px solid #334155;
+      color:var(--text);padding:12px 16px;border-radius:12px;
+      text-decoration:none;font-weight:600
+    }
     .btn:hover{border-color:#475569}
+    .btn--combo .label{font-weight:700}
+    /* wielkość obrazka w przycisku combo */
+    .btn--combo .badge{height:34px;width:auto}
+
     .accent{color:var(--accent)}
     .qrcard{display:flex;flex-direction:column;align-items:center;gap:12px}
     footer{opacity:.7;margin:32px 0 8px;font-size:14px;text-align:center}
+
+    /* poprzedni badge miał 200px — teraz zawężamy tylko w kontekście combo powyżej */
     .badge{max-width:200px;height:auto}
     .qr{background:#fff;padding:12px;border-radius:12px}
   </style>
@@ -35,24 +47,26 @@
         <p>Oficjalna strona gier. Aktualności, linki i pobieranie.</p>
       </div>
     </header>
+
     <nav style="margin-top:12px;display:flex;gap:14px;flex-wrap:wrap">
-  <a href="/" class="btn">Start</a>
-  <a href="/o-projekcie.html" class="btn">O projekcie</a>
-  <a href="/aktualnosci.html" class="btn">Aktualności</a>
-  <a href="/polityka-prywatnosci.html" class="btn">Polityka prywatności</a>
-  <a href="/kontakt.html" class="btn">Kontakt</a>
-</nav>
+      <a href="/" class="btn">Start</a>
+      <a href="/o-projekcie.html" class="btn">O projekcie</a>
+      <a href="/aktualnosci.html" class="btn">Aktualności</a>
+      <a href="/polityka-prywatnosci.html" class="btn">Polityka prywatności</a>
+      <a href="/kontakt.html" class="btn">Kontakt</a>
+    </nav>
+
     <main class="card grid">
       <section>
         <h2>MR Block Breaker</h2>
         <p>Arkadówka typu brick breaker. Rozwalaj klocki, zbieraj bonusy i wskakuj na kolejne poziomy.</p>
 
+        <!-- JEDEN przycisk: obrazek + tekst -->
         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
-          <a id="playLink" class="btn" target="_blank" rel="noopener">
-            <img src="img/google-play-badge.png" alt="Pobierz w Google Play" class="badge"
-                 onerror="this.style.display='none'">
+          <a id="playLink" class="btn btn--combo" target="_blank" rel="noopener" aria-label="Otwórz w Google Play">
+            <img src="img/google-play-badge.png" alt="Pobierz w Google Play" class="badge" loading="lazy">
+            <span class="label">Otwórz w Google Play</span>
           </a>
-          <a id="plainLink" class="btn" target="_blank" rel="noopener">Otwórz w Google Play</a>
         </div>
       </section>
 
@@ -71,16 +85,19 @@
   </div>
 
   <script>
-    // https://play.google.com/store/apps/details?id=com.mrzgredzio.mrblockbreaker
+    // Docelowy link do sklepu Google Play:
     const playUrl = "https://play.google.com/store/apps/details?id=com.mrzgredzio.mrblockbreaker";
-    // Jeśli używasz jeszcze zamkniętych testów, możesz tymczasowo podmienić:
+    // Gdybyś chwilowo używał zamkniętych testów:
     // const playUrl = "https://play.google.com/apps/testing/com.mrzgredzio.mrblockbreaker";
 
+    // Ustaw href dla jedynego przycisku
     document.getElementById('playLink').href = playUrl;
-    document.getElementById('plainLink').href = playUrl;
 
+    // QR + rok w stopce
     document.addEventListener('DOMContentLoaded', () => {
-      new QRCode(document.getElementById("qrcode"), { text: playUrl, width: 240, height: 240, correctLevel: QRCode.CorrectLevel.M });
+      new QRCode(document.getElementById("qrcode"), {
+        text: playUrl, width: 240, height: 240, correctLevel: QRCode.CorrectLevel.M
+      });
       document.getElementById('year').textContent = new Date().getFullYear();
     });
   </script>
