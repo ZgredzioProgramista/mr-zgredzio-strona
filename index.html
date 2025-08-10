@@ -6,6 +6,7 @@
   <title>MR Zgredzio – gry i aktualności</title>
   <meta name="description" content="MR Zgredzio – oficjalna strona gier. Pobierz MR Block Breaker w Google Play." />
   <link rel="canonical" href="https://www.mr-zgredzio.pl/">
+
   <style>
     :root { --bg:#0f172a; --panel:#111827; --text:#e5e7eb; --muted:#94a3b8; --accent:#22c55e; }
     *{box-sizing:border-box}
@@ -26,17 +27,54 @@
     }
     .btn:hover{border-color:#475569}
     .btn--combo .label{font-weight:700}
-    /* wielkość obrazka w przycisku combo */
     .btn--combo .badge{height:34px;width:auto}
 
     .accent{color:var(--accent)}
     .qrcard{display:flex;flex-direction:column;align-items:center;gap:12px}
     footer{opacity:.7;margin:32px 0 8px;font-size:14px;text-align:center}
 
-    /* poprzedni badge miał 200px — teraz zawężamy tylko w kontekście combo powyżej */
     .badge{max-width:200px;height:auto}
     .qr{background:#fff;padding:12px;border-radius:12px}
+
+    /* --- G A L E R I A --- */
+    .gallery{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
+    @media (min-width:700px){ .gallery{ grid-template-columns: repeat(4, 1fr); } }
+
+    .gallery a{
+      display:block; position:relative; aspect-ratio:16/9;
+      border-radius:12px; overflow:hidden;
+      background:#0b1220; border:1px solid #334155;
+    }
+    .gallery img{
+      width:100%; height:100%; object-fit:cover; transition:transform .2s ease;
+    }
+    .gallery a:hover img{ transform:scale(1.04); }
+
+    /* --- L I G H T B O X --- */
+    .lb{ position:fixed; inset:0; background:rgba(0,0,0,.8);
+         display:flex; align-items:center; justify-content:center; z-index:1000; }
+    .lb[hidden]{ display:none; }
+    .lb img{ max-width:90vw; max-height:85vh; border-radius:12px;
+             box-shadow:0 8px 40px rgba(0,0,0,.6); }
+
+    .lb__btn{
+      position:absolute; top:16px;
+      background:#111827; border:1px solid #334155; color:#e5e7eb;
+      border-radius:10px; padding:8px 12px; cursor:pointer;
+    }
+    .lb__close{ right:16px; }
+    .lb__prev, .lb__next{
+      top:50%; transform:translateY(-50%);
+      font-size:26px; width:44px; height:44px; display:grid; place-items:center;
+    }
+    .lb__prev{ left:16px; } .lb__next{ right:16px; }
   </style>
+
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
@@ -68,6 +106,17 @@
             <span class="label">Otwórz w Google Play</span>
           </a>
         </div>
+
+        <!-- M a ł a   g a l e r i a -->
+        <div class="gallery" id="gallery">
+          <a href="img/screens/s1.jpg"><img src="img/screens/s1.jpg" alt="Zrzut ekranu 1" loading="lazy"></a>
+          <a href="img/screens/s2.jpg"><img src="img/screens/s2.jpg" alt="Zrzut ekranu 2" loading="lazy"></a>
+          <a href="img/screens/s3.jpg"><img src="img/screens/s3.jpg" alt="Zrzut ekranu 3" loading="lazy"></a>
+          <a href="img/screens/s4.jpg"><img src="img/screens/s4.jpg" alt="Zrzut ekranu 4" loading="lazy"></a>
+          <a href="img/screens/s5.jpg"><img src="img/screens/s5.jpg" alt="Zrzut ekranu 5" loading="lazy"></a>
+          <a href="img/screens/s6.jpg"><img src="img/screens/s6.jpg" alt="Zrzut ekranu 6" loading="lazy"></a>
+          <!-- (opcjonalnie) dodaj kolejne: s7.jpg, s8.jpg -->
+        </div>
       </section>
 
       <aside class="qrcard">
@@ -84,21 +133,72 @@
     <footer>© <span id="year"></span> MR Zgredzio • <a class="accent" href="/app-ads.txt">app-ads.txt</a></footer>
   </div>
 
-  <script>
-    // Docelowy link do sklepu Google Play:
-    const playUrl = "https://play.google.com/store/apps/details?id=com.mrzgredzio.mrblockbreaker";
-    // Gdybyś chwilowo używał zamkniętych testów:
-    // const playUrl = "https://play.google.com/apps/testing/com.mrzgredzio.mrblockbreaker";
+  <!-- L i g h t b o x -->
+  <div id="lightbox" class="lb" hidden aria-hidden="true">
+    <button class="lb__btn lb__close" aria-label="Zamknij">×</button>
+    <button class="lb__btn lb__prev"  aria-label="Poprzednie">‹</button>
+    <img alt="">
+    <button class="lb__btn lb__next"  aria-label="Następne">›</button>
+  </div>
 
-    // Ustaw href dla jedynego przycisku
+  <script>
+    // Link do Google Play:
+    const playUrl = "https://play.google.com/store/apps/details?id=com.mrzgredzio.mrblockbreaker";
+    // const playUrl = "https://play.google.com/apps/testing/com.mrzgredzio.mrblockbreaker"; // wersja testowa – tylko tymczasowo
+
+    // Ustaw href dla przycisku
     document.getElementById('playLink').href = playUrl;
 
-    // QR + rok w stopce
     document.addEventListener('DOMContentLoaded', () => {
+      // QR + rok w stopce
       new QRCode(document.getElementById("qrcode"), {
         text: playUrl, width: 240, height: 240, correctLevel: QRCode.CorrectLevel.M
       });
       document.getElementById('year').textContent = new Date().getFullYear();
+
+      // --- G A L E R I A  +  L I G H T B O X ---
+      const thumbs = Array.from(document.querySelectorAll('#gallery a'));
+      const lb = document.getElementById('lightbox');
+      const lbImg = lb.querySelector('img');
+      const btnClose = lb.querySelector('.lb__close');
+      const btnPrev  = lb.querySelector('.lb__prev');
+      const btnNext  = lb.querySelector('.lb__next');
+
+      let idx = 0;
+
+      function show(i){
+        idx = (i + thumbs.length) % thumbs.length;
+        lbImg.src = thumbs[idx].getAttribute('href');
+        lb.removeAttribute('hidden');
+        lb.setAttribute('aria-hidden','false');
+      }
+      function hide(){
+        lb.setAttribute('hidden','');
+        lb.setAttribute('aria-hidden','true');
+        lbImg.src = '';
+      }
+
+      thumbs.forEach((a, i) => {
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          show(i);
+        });
+      });
+
+      btnClose.addEventListener('click', hide);
+      btnPrev .addEventListener('click', () => show(idx - 1));
+      btnNext .addEventListener('click', () => show(idx + 1));
+
+      // zamknięcie kliknięciem w tło
+      lb.addEventListener('click', (e) => { if (e.target === lb) hide(); });
+
+      // klawiatura: ESC i strzałki
+      document.addEventListener('keydown', (e) => {
+        if (lb.hasAttribute('hidden')) return;
+        if (e.key === 'Escape') hide();
+        if (e.key === 'ArrowLeft')  show(idx - 1);
+        if (e.key === 'ArrowRight') show(idx + 1);
+      });
     });
   </script>
 </body>
