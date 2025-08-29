@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wycofanie zgody – MR.Zgredzio</title>
+  <meta name="description" content="Strona pozwalająca użytkownikowi dowiedzieć się jak wycofać zgodę na personalizację reklam (UMP/GDPR) w aplikacji MR.Zgredzio.">
+  <link rel="canonical" href="https://www.mr-zgredzio.pl/withdraw-consent.html">
+  <meta name="robots" content="index,follow">
+  <style>
+    :root { --bg:#0f172a; --panel:#111827; --text:#e5e7eb; --muted:#9ca3af; --accent:#22c55e; --accent-2:#3b82f6; }
+    * { box-sizing:border-box; }
+    html, body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif; }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 24px; }
+    header { margin: 16px 0 24px; }
+    h1 { font-size: clamp(1.6rem, 3.5vw, 2.2rem); margin: 0 0 8px; }
+    p.lead { color: var(--muted); margin-top: 0; }
+    .card { background: var(--panel); border: 1px solid #1f2937; border-radius: 16px; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,.15); }
+    h2 { font-size: clamp(1.2rem, 2.5vw, 1.5rem); margin-top:0; }
+    .btns { display:flex; gap:12px; flex-wrap:wrap; margin: 16px 0 0; }
+    .btn { display:inline-block; padding: 12px 18px; border-radius: 999px; text-decoration:none; font-weight:600; border:1px solid transparent; }
+    .btn-primary { background: var(--accent); color: #052e16; }
+    .btn-secondary { background: #0b1220; color: var(--text); border-color:#1f2937; }
+    .note { font-size: .95rem; color: var(--muted); }
+    footer { margin: 28px 0 8px; color: var(--muted); font-size: .9rem; }
+    .code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:#0b1220; color:#e5e7eb; padding:2px 6px; border-radius:6px; border:1px solid #1f2937; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Wycofanie zgody na personalizację reklam</h1>
+      <p class="lead">Masz prawo w każdej chwili wycofać zgodę udzieloną w aplikacji poprzez Google User Messaging Platform (UMP).</p>
+    </header>
+
+    <section class="card" aria-labelledby="howto">
+      <h2 id="howto">Jak cofnąć zgodę?</h2>
+      <ol>
+        <li>Otwórz naszą aplikację na swoim urządzeniu.</li>
+        <li>Wejdź w <span class="code">Ustawienia &rarr; Prywatność</span> (lub <span class="code">Ustawienia &rarr; Reklamy</span>).</li>
+        <li>Wybierz <strong>Zmień preferencje</strong> (wywołaj ponownie okno UMP) i zdecyduj, czy chcesz personalizację reklam, czy nie.</li>
+      </ol>
+      <div class="btns">
+        <a class="btn btn-primary" href="#" aria-disabled="true">Wycofaj zgodę (otwórz w aplikacji)</a>
+        <a class="btn btn-secondary" href="/">Przejdź na stronę główną</a>
+      </div>
+      <p class="note">Przycisk „Wycofaj zgodę” ma charakter informacyjny i nie zmienia ustawień z poziomu przeglądarki. Cofnięcie zgody odbywa się w aplikacji przy użyciu UMP SDK.</p>
+    </section>
+
+    <section class="card" style="margin-top:16px" aria-labelledby="help">
+      <h2 id="help">Potrzebujesz pomocy?</h2>
+      <p>Jeśli nie możesz znaleźć odpowiedniej opcji w aplikacji, skontaktuj się z nami: <a href="mailto:mr-zgredzio@proton.me">mr-zgredzio@proton.me</a>.</p>
+      <p class="note">Wycofanie zgody nie wpływa na zgodność z prawem przetwarzania, którego dokonano przed wycofaniem (art. 7 ust. 3 RODO).</p>
+    </section>
+
+    <footer>Ostatnia aktualizacja: 2025-08-29</footer>
+  </div>
+</body>
+</html>
