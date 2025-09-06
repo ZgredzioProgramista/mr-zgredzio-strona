@@ -14,54 +14,60 @@
     .wrap{max-width:960px;margin:0 auto;padding:24px}
     header{display:flex;justify-content:space-between;align-items:center;gap:16px}
     .card{background:var(--panel);border-radius:16px;padding:24px;margin-top:24px}
-    .grid{display:grid;grid-template-columns:1fr;gap:24px}
-    @media (min-width:900px){ .grid{grid-template-columns:1.2fr .8fr} }
     h1{margin:0 0 8px;font-size:clamp(28px,4vw,40px)}
     p{margin:0 0 12px;color:var(--muted)}
 
+    /* przyciski */
     .btn{
       display:inline-flex;align-items:center;gap:10px;
-      background:#1f2937;border:1px solid #334155;
-      color:var(--text);padding:12px 16px;border-radius:12px;
-      text-decoration:none;font-weight:600
+      background:#1f2937;border:1px solid #334155;color:var(--text);
+      padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:600
     }
     .btn:hover{border-color:#475569}
     .btn--combo .label{font-weight:700}
     .btn--combo .badge{height:34px;width:auto}
 
     .accent{color:var(--accent)}
-    .qrcard{display:flex;flex-direction:column;align-items:center;gap:12px}
     footer{opacity:.7;margin:32px 0 8px;font-size:14px;text-align:center}
 
     .badge{max-width:200px;height:auto}
     .qr{background:#fff;padding:12px;border-radius:12px}
 
-    /* --- G A L E R I A --- */
-    .gallery{
-      margin-top:14px;
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:10px;
+    /* DWA OKNA w środku */
+    .twocol{
+      display:grid; gap:20px;
+      grid-template-columns:1fr;
     }
-    @media (min-width:700px){ .gallery{ grid-template-columns: repeat(4, 1fr); } }
+    @media (min-width:900px){
+      .twocol{ grid-template-columns:1fr 1fr; }
+    }
+    .pane{
+      border:1px solid #334155;border-radius:14px;padding:18px;
+      background:linear-gradient(180deg,#0f172a 0%, #0e1626 100%);
+    }
+    .pane h2{margin:0 0 8px}
 
+    /* galerie */
+    .gallery{
+      margin-top:12px;
+      display:grid; gap:10px;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    @media (max-width:699px){ .gallery{ grid-template-columns: repeat(3, 1fr);} }
     .gallery a{
       display:block; position:relative; aspect-ratio:16/9;
       border-radius:12px; overflow:hidden;
       background:#0b1220; border:1px solid #334155;
     }
-    .gallery img{
-      width:100%; height:100%; object-fit:cover; transition:transform .2s ease;
-    }
+    .gallery img{ width:100%; height:100%; object-fit:cover; transition:transform .2s ease; }
     .gallery a:hover img{ transform:scale(1.04); }
 
-    /* --- L I G H T B O X --- */
+    /* lightbox */
     .lb{ position:fixed; inset:0; background:rgba(0,0,0,.8);
          display:flex; align-items:center; justify-content:center; z-index:1000; }
     .lb[hidden]{ display:none; }
     .lb img{ max-width:90vw; max-height:85vh; border-radius:12px;
              box-shadow:0 8px 40px rgba(0,0,0,.6); }
-
     .lb__btn{
       position:absolute; top:16px;
       background:#111827; border:1px solid #334155; color:#e5e7eb;
@@ -73,6 +79,9 @@
       font-size:26px; width:44px; height:44px; display:grid; place-items:center;
     }
     .lb__prev{ left:16px; } .lb__next{ right:16px; }
+
+    /* układy pomocnicze */
+    .row{display:flex;gap:12px;flex-wrap:wrap}
   </style>
 
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -94,36 +103,58 @@
       <a href="/kontakt.html" class="btn">Kontakt</a>
     </nav>
 
-    <main class="card grid">
-      <section>
-        <h2>MR Block Breaker</h2>
-        <p>Arkadówka typu brick breaker. Rozwalaj klocki, zbieraj bonusy i wskakuj na kolejne poziomy.</p>
+    <!-- Ś R O D E K: dwa okna -->
+    <section class="card">
+      <div class="twocol">
+        <!-- LEWE OKNO: GRA (bez zmian + QR) -->
+        <div class="pane" id="pane-game">
+          <h2>MR Block Breaker</h2>
+          <p>Arkadówka typu brick breaker. Rozwalaj klocki, zbieraj bonusy i wskakuj na kolejne poziomy.</p>
 
-        <!-- JEDEN przycisk: obrazek + tekst -->
-        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
-          <a id="playLink" class="btn btn--combo" target="_blank" rel="noopener" aria-label="Otwórz w Google Play">
-            <img src="img/google-play-badge.png" alt="Pobierz w Google Play" class="badge" loading="lazy">
-            <span class="label">Otwórz w Google Play</span>
-          </a>
+          <div class="row">
+            <a id="playLink" class="btn btn--combo" target="_blank" rel="noopener" aria-label="Otwórz w Google Play">
+              <img src="img/google-play-badge.png" alt="Pobierz w Google Play" class="badge" loading="lazy">
+              <span class="label">Otwórz w Google Play</span>
+            </a>
+            <span style="flex:1"></span>
+            <span id="qrcode" class="qr" aria-label="Kod QR do pobrania gry"></span>
+          </div>
+
+          <div class="gallery" id="gallery-game">
+            <a href="img/screens/s1.jpg"><img src="img/screens/s1.jpg" alt="Zrzut ekranu 1" loading="lazy"></a>
+            <a href="img/screens/s2.jpg"><img src="img/screens/s2.jpg" alt="Zrzut ekranu 2" loading="lazy"></a>
+            <a href="img/screens/s3.jpg"><img src="img/screens/s3.jpg" alt="Zrzut ekranu 3" loading="lazy"></a>
+            <a href="img/screens/s4.jpg"><img src="img/screens/s4.jpg" alt="Zrzut ekranu 4" loading="lazy"></a>
+            <a href="img/screens/s5.jpg"><img src="img/screens/s5.jpg" alt="Zrzut ekranu 5" loading="lazy"></a>
+          </div>
         </div>
 
-        <!-- M a ł a   g a l e r i a -->
-        <div class="gallery" id="gallery">
-          <a href="img/screens/s1.jpg"><img src="img/screens/s1.jpg" alt="Zrzut ekranu 1" loading="lazy"></a>
-          <a href="img/screens/s2.jpg"><img src="img/screens/s2.jpg" alt="Zrzut ekranu 2" loading="lazy"></a>
-          <a href="img/screens/s3.jpg"><img src="img/screens/s3.jpg" alt="Zrzut ekranu 3" loading="lazy"></a>
-          <a href="img/screens/s4.jpg"><img src="img/screens/s4.jpg" alt="Zrzut ekranu 4" loading="lazy"></a>
-          <a href="img/screens/s5.jpg"><img src="img/screens/s5.jpg" alt="Zrzut ekranu 5" loading="lazy"></a>          
-          <!-- (opcjonalnie) dodaj kolejne: s6.jpg, s8.jpg -->
+        <!-- PRAWE OKNO: REDBUBBLE -->
+        <div class="pane" id="pane-rb">
+          <h2>Redbubble</h2>
+          <p>Moje grafiki i merch. Zobacz sklep i nowości.</p>
+
+          <div class="row">
+            <a id="rbLink" class="btn btn--combo" target="_blank" rel="noopener" aria-label="Otwórz sklep Redbubble">
+              <svg class="badge" viewBox="0 0 64 64" aria-hidden="true">
+                <circle cx="32" cy="32" r="30" fill="#e11d48"/>
+                <text x="32" y="39" text-anchor="middle" font-size="26" font-family="Inter, Arial, sans-serif" fill="#fff" font-weight="700">RB</text>
+              </svg>
+              <span class="label">Otwórz sklep Redbubble</span>
+            </a>
+          </div>
+
+          <div class="gallery" id="gallery-rb">
+            <a href="img/rb/rb1.jpg"><img src="img/rb/rb1.jpg" alt="Redbubble 1" loading="lazy"></a>
+            <a href="img/rb/rb2.jpg"><img src="img/rb/rb2.jpg" alt="Redbubble 2" loading="lazy"></a>
+            <a href="img/rb/rb3.jpg"><img src="img/rb/rb3.jpg" alt="Redbubble 3" loading="lazy"></a>
+            <a href="img/rb/rb4.jpg"><img src="img/rb/rb4.jpg" alt="Redbubble 4" loading="lazy"></a>
+          </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <aside class="qrcard">
-        <div id="qrcode" class="qr"></div>
-        <div style="font-size:14px;color:var(--muted)">Zeskanuj, by pobrać grę na telefon</div>
-      </aside>
-    </main>
-
+    <!-- D O Ł  – bez zmian -->
     <section class="card">
       <h3>Nowości i plany</h3>
       <p>To dopiero początek. Wkrótce dodam blog z aktualnościami, changelogiem i zapowiedziami kolejnych gier.</p>
@@ -132,7 +163,7 @@
     <footer>© <span id="year"></span> MR Zgredzio • <a class="accent" href="/app-ads.txt">app-ads.txt</a></footer>
   </div>
 
-  <!-- L i g h t b o x -->
+  <!-- Lightbox -->
   <div id="lightbox" class="lb" hidden aria-hidden="true">
     <button class="lb__btn lb__close" aria-label="Zamknij">×</button>
     <button class="lb__btn lb__prev"  aria-label="Poprzednie">‹</button>
@@ -141,22 +172,22 @@
   </div>
 
   <script>
-    // Link do Google Play:
+    // Linki
     const playUrl = "https://play.google.com/store/apps/details?id=com.mrzgredzio.mrblockbreaker";
-    // const playUrl = "https://play.google.com/apps/testing/com.mrzgredzio.mrblockbreaker"; // wersja testowa – tylko tymczasowo
+    const rbUrl   = "https://www.redbubble.com/people/mr-zgredzio/shop"; // <- PODMIEŃ NA SWÓJ SKLEP
 
-    // Ustaw href dla przycisku
     document.getElementById('playLink').href = playUrl;
+    document.getElementById('rbLink').href   = rbUrl;
 
     document.addEventListener('DOMContentLoaded', () => {
-      // QR + rok w stopce
+      // QR i rok
       new QRCode(document.getElementById("qrcode"), {
-        text: playUrl, width: 240, height: 240, correctLevel: QRCode.CorrectLevel.M
+        text: playUrl, width: 120, height: 120, correctLevel: QRCode.CorrectLevel.M
       });
       document.getElementById('year').textContent = new Date().getFullYear();
 
-      // --- G A L E R I A  +  L I G H T B O X ---
-      const thumbs = Array.from(document.querySelectorAll('#gallery a'));
+      // LIGHTBOX dla obu galerii
+      const thumbs = Array.from(document.querySelectorAll('#gallery-game a, #gallery-rb a'));
       const lb = document.getElementById('lightbox');
       const lbImg = lb.querySelector('img');
       const btnClose = lb.querySelector('.lb__close');
@@ -164,7 +195,6 @@
       const btnNext  = lb.querySelector('.lb__next');
 
       let idx = 0;
-
       function show(i){
         idx = (i + thumbs.length) % thumbs.length;
         lbImg.src = thumbs[idx].getAttribute('href');
@@ -177,21 +207,11 @@
         lbImg.src = '';
       }
 
-      thumbs.forEach((a, i) => {
-        a.addEventListener('click', (e) => {
-          e.preventDefault();
-          show(i);
-        });
-      });
-
+      thumbs.forEach((a, i) => a.addEventListener('click', e => { e.preventDefault(); show(i); }));
       btnClose.addEventListener('click', hide);
       btnPrev .addEventListener('click', () => show(idx - 1));
       btnNext .addEventListener('click', () => show(idx + 1));
-
-      // zamknięcie kliknięciem w tło
       lb.addEventListener('click', (e) => { if (e.target === lb) hide(); });
-
-      // klawiatura: ESC i strzałki
       document.addEventListener('keydown', (e) => {
         if (lb.hasAttribute('hidden')) return;
         if (e.key === 'Escape') hide();
