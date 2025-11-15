@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Usuwanie konta – Tablica Kętrzyn: Fachowcy</title>
+  <meta name="description" content="Instrukcja usuwania konta w aplikacji Tablica Kętrzyn: Fachowcy oraz informacje o tym, jakie dane są usuwane, a jakie mogą pozostać w logach technicznych.">
+  <link rel="canonical" href="https://www.mr-zgredzio.pl/usuniecie-konta-tablica-ketrzyn-fachowcy.html">
+  <style>
+    :root { --bg:#0f172a; --panel:#111827; --text:#e5e7eb; --muted:#94a3b8; --accent:#22c55e; }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,Segoe UI,Roboto,Inter,Arial;background:var(--bg);color:var(--text)}
+    .wrap{max-width:960px;margin:0 auto;padding:24px}
+    .card{background:var(--panel);border-radius:16px;padding:24px;margin-top:24px;line-height:1.6}
+    a{color:var(--accent);text-decoration:none}
+    .btn{display:inline-flex;gap:8px;background:#1f2937;border:1px solid #334155;color:var(--text);padding:10px 14px;border-radius:10px}
+    h2{margin-top:0}
+    ol{padding-left:20px}
+    ul{padding-left:20px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Usuwanie konta – Tablica Kętrzyn: Fachowcy</h1>
+
+    <nav style="margin-top:12px;display:flex;gap:14px;flex-wrap:wrap">
+      <a href="/" class="btn">Start</a>
+      <a href="/o-projekcie.html" class="btn">O projekcie</a>
+      <a href="/aktualnosci.html" class="btn">Aktualności</a>
+      <a href="/polityka-prywatnosci.html" class="btn">Polityka prywatności</a>
+      <a href="/kontakt.html" class="btn">Kontakt</a>
+    </nav>
+
+    <section class="card">
+      <h2>1. Zakres</h2>
+      <p>Ta strona opisuje sposób usunięcia konta w aplikacji mobilnej <strong>„Tablica Kętrzyn: Fachowcy”</strong>
+         oraz wyjaśnia, jakie dane są usuwane, a jakie mogą pozostać w formie technicznych logów.</p>
+      <p>Strona dotyczy wyłącznie aplikacji ogłoszeniowej „Tablica Kętrzyn: Fachowcy” i nie obejmuje innych gier ani projektów MR Zgredzio.</p>
+    </section>
+
+    <section class="card">
+      <h2>2. Jak samodzielnie usunąć konto w aplikacji?</h2>
+      <ol>
+        <li>Otwórz aplikację <strong>„Tablica Kętrzyn: Fachowcy”</strong> na swoim telefonie.</li>
+        <li>Zaloguj się na konto, które chcesz usunąć (e-mail + hasło).</li>
+        <li>Przejdź do sekcji <strong>„Mój profil”</strong>.</li>
+        <li>Na dole ekranu wybierz opcję <strong>„Usuń konto”</strong>.</li>
+        <li>Przeczytaj wyświetlony komunikat o skutkach usunięcia konta.</li>
+        <li>Potwierdź decyzję, naciskając przycisk <strong>„Usuń konto na stałe”</strong> (lub przycisk o podobnej nazwie).</li>
+      </ol>
+      <p>Po potwierdzeniu Twoje konto logowania zostanie usunięte, a powiązane dane zostaną oznaczone do usunięcia zgodnie z opisem poniżej.
+         Operacja jest nieodwracalna.</p>
+    </section>
+
+    <section class="card">
+      <h2>3. Jakie dane są usuwane?</h2>
+      <ul>
+        <li><strong>Konto logowania (Firebase Authentication)</strong> – usuwany jest rekord konta (e-mail, zaszyfrowane hasło, identyfikator użytkownika UID). Po tej operacji nie można się już zalogować na to konto.</li>
+        <li><strong>Profil użytkownika (Firestore – kolekcja „users”)</strong> – usuwany jest dokument profilu przypisany do Twojego konta (np. nazwa/pseudonim, dane kontaktowe, licznik ogłoszeń oraz inne informacje zapisane w profilu).</li>
+        <li><strong>Ogłoszenia, których jesteś autorem</strong> – wszystkie ogłoszenia powiązane z Twoim kontem (np. dokumenty w kolekcji „ogloszenia” z Twoim „autorUid”) są usuwane wraz z ich treścią oraz powiązanymi danymi (np. licznik kliknięć „Zadzwoń”, zdjęcia ogłoszeń).</li>
+        <li><strong>Komentarze i opinie dodane przez Ciebie</strong> – usuwane są komentarze/opinie przypisane do Twojego konta, tak aby nie były już widoczne w aplikacji.</li>
+        <li><strong>Ulubione (lista obserwowanych ogłoszeń)</strong> – usuwane są dokumenty w podkolekcji <code>users/{uid}/ulubione</code>, czyli Twoja lista „ulubionych” ogłoszeń.</li>
+        <li><strong>Dane lokalne na urządzeniu</strong> – aplikacja usuwa lub nadpisuje lokalne dane związane z Twoim kontem (np. zapisane tokeny, stan sesji), tak aby po usunięciu konta aplikacja traktowała Cię jak nowego użytkownika.</li>
+      </ul>
+      <p>Usunięcie konta w „Tablica Kętrzyn: Fachowcy” nie usuwa żadnych danych z innych gier MR Zgredzio ani innych usług (np. samego konta Google).</p>
+    </section>
+
+    <section class="card">
+      <h2>4. Co może pozostać i na jak długo?</h2>
+      <p>Po usunięciu konta w aplikacji mogą nadal istnieć:</p>
+      <ul>
+        <li><strong>Logi techniczne i dzienniki zdarzeń</strong> – usługi Google Firebase / Google Cloud mogą przechowywać techniczne logi (np. informację o usunięciu konta, identyfikator urządzenia, adres IP, datę i godzinę) przez czas niezbędny do celów bezpieczeństwa, analityki i rozliczeń. Okresy przechowywania określane są przez Google w ich politykach prywatności. Jako twórca aplikacji nie mam bezpośredniego wpływu na te okresy.</li>
+        <li><strong>Zagregowane statystyki i dane anonimowe</strong> – w statystykach mogą pozostać dane zanonimizowane lub zagregowane (np. łączna liczba ogłoszeń w danej kategorii), które nie pozwalają na powiązanie informacji z konkretnym kontem użytkownika.</li>
+      </ul>
+      <p>Nie prowadzę własnych, niezależnych kopii baz danych z pełnymi danymi użytkowników poza usługami dostarczanymi przez Google/Firebase. Ewentualne kopie techniczne służą wyłącznie do utrzymania i poprawnego działania aplikacji.</p>
+    </section>
+
+    <section class="card">
+      <h2>5. Usunięcie konta bez dostępu do aplikacji</h2>
+      <p>Jeżeli nie masz dostępu do aplikacji lub do adresu e-mail powiązanego z kontem, możesz poprosić o usunięcie konta przez e-mail:</p>
+      <ul>
+        <li>Wyślij wiadomość na adres: <a href="mailto:mrzgredzio4fun@gmail.com">mrzgredzio4fun@gmail.com</a>.</li>
+        <li>W tytule wpisz: <strong>„Tablica Kętrzyn: Fachowcy – usunięcie konta”</strong>.</li>
+        <li>W treści podaj:
+          <ul>
+            <li>adres e-mail powiązany z kontem (jeśli go pamiętasz),</li>
+            <li>nazwę/pseudonim używany w aplikacji (jeżeli był ustawiony),</li>
+            <li>krótki opis sytuacji (np. brak dostępu do skrzynki e-mail).</li>
+          </ul>
+        </li>
+      </ul>
+      <p>W celu ochrony innych użytkowników mogę poprosić o dodatkowe informacje pomagające potwierdzić, że konto należy do Ciebie.
+         Po potwierdzeniu tożsamości ręcznie uruchamiam procedurę usunięcia konta, zgodnie z opisem na tej stronie.</p>
+    </section>
+
+    <footer style="opacity:.7;margin:32px 0 8px;font-size:14px">
+      © <script>document.write(new Date().getFullYear())</script> MR Zgredzio
+    </footer>
+  </div>
+</body>
+</html>
