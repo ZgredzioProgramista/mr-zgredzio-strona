@@ -8,162 +8,419 @@
   <link rel="canonical" href="https://www.mr-zgredzio.pl/">
 
   <style>
-    :root { --bg:#0f172a; --panel:#111827; --text:#e5e7eb; --muted:#94a3b8; --accent:#22c55e; }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,Segoe UI,Roboto,Inter,Arial;background:var(--bg);color:var(--text)}
-    .wrap{max-width:960px;margin:0 auto;padding:24px}
-    header{display:flex;justify-content:space-between;align-items:center;gap:16px}
-    .card{background:var(--panel);border-radius:16px;padding:24px;margin-top:24px}
-    h1{margin:0 0 8px;font-size:clamp(28px,4vw,40px)}
-    p{margin:0 0 12px;color:var(--muted)}
-
-    /* przyciski */
-    .btn{
-      display:inline-flex;align-items:center;gap:10px;
-      background:#1f2937;border:1px solid #334155;color:var(--text);
-      padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:600
+    :root {
+      /* Kolory bazowe strony */
+      --bg:#020617;
+      --panel:#020617;
+      --panel-soft:#0b1120;
+      --panel-strong:#111827;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --accent:#22c55e;
     }
-    .btn:hover{border-color:#475569}
-    .btn--combo .label{font-weight:700}
-    .btn--combo .badge{height:34px;width:auto}
 
-    .accent{color:var(--accent)}
-    footer{opacity:.7;margin:32px 0 8px;font-size:14px;text-align:center}
+    *{ box-sizing:border-box }
 
-    .badge{max-width:200px;height:auto}
-    .qr{background:#fff;padding:12px;border-radius:12px}
+    body{
+      margin:0;
+      font-family:system-ui,Segoe UI,Roboto,Inter,Arial;
+      color:var(--text);
 
-    /* DWA OKNA w środku */
-    .twocol{
-      display:grid; gap:20px;
+      /* [NOWE] Delikatne animowane tło – bez ciężkiego 3D, ale „żywe” */
+      background:
+        radial-gradient(circle at 0%   0%,  #1e293b 0,  transparent 55%),
+        radial-gradient(circle at 100% 0%,  #065f46 0,  transparent 55%),
+        radial-gradient(circle at 0% 100%,  #1d4ed8 0,  transparent 55%),
+        var(--bg);
+      background-size: 200% 200%;
+      animation: bgMove 26s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgMove {
+      0% {
+        background-position: 0% 0%, 100% 0%, 0% 100%, 50% 50%;
+      }
+      100% {
+        background-position: 40% 60%, 60% 0%, 100% 100%, 50% 50%;
+      }
+    }
+
+    .wrap{
+      max-width:1200px; /* [NOWE] trochę szerzej, bo mamy 3 okna + menu boczne */
+      margin:0 auto;
+      padding:24px;
+    }
+
+    /* [NOWE] Układ: lewa część treść, prawa część – menu boczne */
+    .layout{
+      display:flex;
+      gap:24px;
+      align-items:flex-start;
+    }
+
+    .main{
+      flex:1 1 auto;
+      min-width:0;
+    }
+
+    .side-nav{
+      width:220px;
+      flex:0 0 auto;
+    }
+
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+    }
+
+    .card{
+      background:linear-gradient(180deg,var(--panel-soft) 0%,var(--panel-strong) 100%);
+      border-radius:16px;
+      padding:24px;
+      margin-top:24px;
+      border:1px solid rgba(148,163,184,.35);
+      box-shadow:0 18px 35px rgba(15,23,42,.6);
+      backdrop-filter:blur(12px);
+    }
+
+    h1{
+      margin:0 0 8px;
+      font-size:clamp(28px,4vw,40px);
+    }
+    p{ margin:0 0 12px; color:var(--muted); }
+
+    /* przyciski ogólne */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      background:#020617;
+      border:1px solid #334155;
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:12px;
+      text-decoration:none;
+      font-weight:600;
+      font-size:14px;
+      transition:background .15s ease,border-color .15s ease,transform .12s ease;
+    }
+    .btn:hover{
+      border-color:#64748b;
+      background:#020617;
+      transform:translateY(-1px);
+    }
+
+    .btn--combo .label{ font-weight:700; }
+    .btn--combo .badge{ height:34px;width:auto; }
+
+    .accent{ color:var(--accent); }
+
+    footer{
+      opacity:.7;
+      margin:32px 0 8px;
+      font-size:14px;
+      text-align:center;
+    }
+
+    .badge{
+      max-width:200px;
+      height:auto;
+    }
+
+    .qr{
+      background:#020617;
+      padding:10px;
+      border-radius:12px;
+      border:1px solid #334155;
+    }
+
+    /* [NOWE] Grid 3 okien zamiast tylko 2 */
+    .grid-apps{
+      display:grid;
+      gap:20px;
       grid-template-columns:1fr;
     }
-    @media (min-width:900px){
-      .twocol{ grid-template-columns:1fr 1fr; }
-    }
-    .pane{
-      border:1px solid #334155;border-radius:14px;padding:18px;
-      background:linear-gradient(180deg,#0f172a 0%, #0e1626 100%);
-    }
-    .pane h2{margin:0 0 8px}
 
-    /* galerie */
+    @media (min-width:900px){
+      .grid-apps{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+      }
+    }
+
+    .pane{
+      border:1px solid #334155;
+      border-radius:14px;
+      padding:18px;
+      background:radial-gradient(circle at 0 0,#0f172a 0,transparent 55%), #020617;
+      box-shadow:0 10px 25px rgba(0,0,0,.5);
+    }
+
+    .pane h2{
+      margin:0 0 8px;
+      font-size:18px;
+    }
+
+    .row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    /* galerie z miniaturami */
     .gallery{
       margin-top:12px;
-      display:grid; gap:10px;
+      display:grid;
+      gap:10px;
       grid-template-columns: repeat(4, 1fr);
     }
-    @media (max-width:699px){ .gallery{ grid-template-columns: repeat(3, 1fr);} }
-    .gallery a{
-      display:block; position:relative; aspect-ratio:16/9;
-      border-radius:12px; overflow:hidden;
-      background:#0b1220; border:1px solid #334155;
+    @media (max-width:699px){
+      .gallery{ grid-template-columns: repeat(3, 1fr); }
     }
-    .gallery img{ width:100%; height:100%; object-fit:cover; transition:transform .2s ease; }
-    .gallery a:hover img{ transform:scale(1.04); }
+    .gallery a{
+      display:block;
+      position:relative;
+      aspect-ratio:16/9;
+      border-radius:12px;
+      overflow:hidden;
+      background:#020617;
+      border:1px solid #334155;
+    }
+    .gallery img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      transition:transform .2s ease,opacity .2s ease;
+      opacity:.95;
+    }
+    .gallery a:hover img{
+      transform:scale(1.04);
+      opacity:1;
+    }
 
-    /* lightbox */
-    .lb{ position:fixed; inset:0; background:rgba(0,0,0,.8);
-         display:flex; align-items:center; justify-content:center; z-index:1000; }
+    /* [NOWE] Menu boczne – przyciski pionowo po prawej */
+    .side-nav nav{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      position:sticky;
+      top:24px; /* menu „przyklejone” przy przewijaniu na desktopie */
+    }
+    .side-nav .btn{
+      width:100%;
+      justify-content:flex-start;
+    }
+
+    .side-nav-title{
+      color:var(--muted);
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.09em;
+      margin-bottom:6px;
+    }
+
+    /* [NOWE] Prosty placeholder pod logo TKF / inne logotypy */
+    .badge--placeholder{
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,#16a34a,#22c55e);
+      color:#022c22;
+      border-radius:999px;
+      padding:0 16px;
+      height:34px;
+      font-weight:800;
+      letter-spacing:.08em;
+      font-size:11px;
+      text-transform:uppercase;
+      border:1px solid rgba(15,23,42,.6);
+      min-width:64px;
+    }
+
+    /* LIGHTBOX – jak wcześniej, ale bez zmian logiki */
+    .lb{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.85);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:1000;
+    }
     .lb[hidden]{ display:none; }
-    .lb img{ max-width:90vw; max-height:85vh; border-radius:12px;
-             box-shadow:0 8px 40px rgba(0,0,0,.6); }
+    .lb img{
+      max-width:90vw;
+      max-height:85vh;
+      border-radius:12px;
+      box-shadow:0 8px 40px rgba(0,0,0,.8);
+    }
     .lb__btn{
-      position:absolute; top:16px;
-      background:#111827; border:1px solid #334155; color:#e5e7eb;
-      border-radius:10px; padding:8px 12px; cursor:pointer;
+      position:absolute;
+      top:16px;
+      background:#020617;
+      border:1px solid #334155;
+      color:#e5e7eb;
+      border-radius:10px;
+      padding:8px 12px;
+      cursor:pointer;
     }
     .lb__close{ right:16px; }
     .lb__prev, .lb__next{
-      top:50%; transform:translateY(-50%);
-      font-size:26px; width:44px; height:44px; display:grid; place-items:center;
+      top:50%;
+      transform:translateY(-50%);
+      font-size:26px;
+      width:44px;
+      height:44px;
+      display:grid;
+      place-items:center;
     }
-    .lb__prev{ left:16px; } .lb__next{ right:16px; }
+    .lb__prev{ left:16px; }
+    .lb__next{ right:16px; }
 
-    /* układy pomocnicze */
-    .row{display:flex;gap:12px;flex-wrap:wrap}
+    /* Responsywność – na telefonie menu pod treścią, przyciski w rzędzie */
+    @media (max-width:900px){
+      .layout{
+        flex-direction:column-reverse; /* na górze treść, pod spodem menu */
+      }
+      .side-nav{
+        width:100%;
+      }
+      .side-nav nav{
+        flex-direction:row;
+        flex-wrap:wrap;
+        position:static;
+      }
+      .side-nav .btn{
+        flex:1 1 auto;
+        justify-content:center;
+      }
+    }
   </style>
 
+  <!-- Zewnętrzna biblioteka do generowania kodu QR (jak wcześniej) -->
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
   <div class="wrap">
-    <header>
-      <div>
-        <h1>MR <span class="accent">Zgredzio</span></h1>
-        <p>MR Zgredzio – gry mobilne i grafiki na koszulkach. Pobierz darmową grę MR Block Breaker z Google Play i sprawdź unikalne projekty w sklepie Redbubble.</p>
+    <div class="layout">
+      <!-- Główna część strony (lewa) -->
+      <div class="main">
+        <header>
+          <div>
+            <h1>MR <span class="accent">Zgredzio</span></h1>
+            <p>MR Zgredzio – gry mobilne, lokalne aplikacje i grafiki na koszulkach. Pobierz darmową grę MR Block Breaker, sprawdź sklep Redbubble i nową aplikację Tablica Kętrzyn: Fachowcy.</p>
+          </div>
+        </header>
+
+        <!-- Sekcja z trzema „oknami” aplikacji -->
+        <section class="card">
+          <div class="grid-apps">
+            <!-- OKNO 1: MR Block Breaker -->
+            <div class="pane" id="pane-game">
+              <h2>MR Block Breaker</h2>
+              <p>Arkadówka typu brick breaker. Rozwalaj klocki, zbieraj bonusy i wskakuj na kolejne poziomy.</p>
+
+              <div class="row">
+                <a id="playLink" class="btn btn--combo" target="_blank" rel="noopener" aria-label="Otwórz MR Block Breaker w Google Play">
+                  <img src="img/google-play-badge.png" alt="Pobierz w Google Play" class="badge" loading="lazy">
+                  <span class="label">Otwórz w Google Play</span>
+                </a>
+                <span style="flex:1"></span>
+                <span id="qrcode" class="qr" aria-label="Kod QR do pobrania gry"></span>
+              </div>
+
+              <div class="gallery" id="gallery-game">
+                <a href="img/screen/s1.jpg"><img src="img/screen/s1.jpg" alt="Zrzut ekranu 1" loading="lazy"></a>
+                <a href="img/screen/s2.jpg"><img src="img/screen/s2.jpg" alt="Zrzut ekranu 2" loading="lazy"></a>
+                <a href="img/screen/s3.jpg"><img src="img/screen/s3.jpg" alt="Zrzut ekranu 3" loading="lazy"></a>
+                <a href="img/screen/s4.jpg"><img src="img/screen/s4.jpg" alt="Zrzut ekranu 4" loading="lazy"></a>
+                <a href="img/screen/s5.jpg"><img src="img/screen/s5.jpg" alt="Zrzut ekranu 5" loading="lazy"></a>
+              </div>
+            </div>
+
+            <!-- OKNO 2: Redbubble -->
+            <div class="pane" id="pane-rb">
+              <h2>Redbubble</h2>
+              <p>Moje grafiki i merch. Zobacz sklep i nowości.</p>
+
+              <div class="row">
+                <a id="rbLink" class="btn btn--combo" target="_blank" rel="noopener" aria-label="Otwórz sklep Redbubble">
+                  <svg class="badge" viewBox="0 0 64 64" aria-hidden="true">
+                    <circle cx="32" cy="32" r="30" fill="#e11d48"/>
+                    <text x="32" y="39" text-anchor="middle" font-size="26" font-family="Inter, Arial, sans-serif" fill="#fff" font-weight="700">RB</text>
+                  </svg>
+                  <span class="label">Otwórz sklep Redbubble</span>
+                </a>
+              </div>
+
+              <div style="margin-top:14px">
+                <h4 style="margin:0 0 8px;font-size:16px;color:var(--muted)">Podgląd kolekcji</h4>
+                <a href="https://www.redbubble.com/people/mr-zgredzio/shop" target="_blank" rel="noopener">
+                  <img src="img/rb/preview.jpg" alt="Podgląd kolekcji Redbubble" style="width:100%;border-radius:12px;border:1px solid #334155">
+                </a>
+              </div>
+            </div>
+
+            <!-- OKNO 3: Tablica Kętrzyn: Fachowcy -->
+            <div class="pane" id="pane-tkf">
+              <h2>Tablica Kętrzyn: Fachowcy</h2>
+              <p>Lokalna aplikacja ogłoszeniowa łącząca fachowców i klientów z Kętrzyna i okolic.</p>
+
+              <div class="row">
+                <!-- [NOWE] Tutaj później możesz podmienić placeholder na własne logo aplikacji -->
+                <a id="tkfLink" class="btn btn--combo" target="_blank" rel="noopener" aria-label="Otwórz Tablica Kętrzyn: Fachowcy w Google Play">
+                  <div class="badge--placeholder">
+                    TKF
+                  </div>
+                  <span class="label">Otwórz w Google Play</span>
+                </a>
+              </div>
+
+              <div style="margin-top:14px">
+                <h4 style="margin:0 0 8px;font-size:16px;color:var(--muted)">Podgląd aplikacji</h4>
+                <!-- [NOWE] Galeria pod TKF – podmień ścieżki na swoje zrzuty ekranu lub zostaw puste -->
+                <div class="gallery" id="gallery-tkf">
+                  <!-- Przykładowe miejsca na screeny – usuń, jeśli jeszcze nie masz plików -->
+                  <!--
+                  <a href="img/tkf/s1.jpg"><img src="img/tkf/s1.jpg" alt="Zrzut ekranu aplikacji Tablica Kętrzyn: Fachowcy 1" loading="lazy"></a>
+                  <a href="img/tkf/s2.jpg"><img src="img/tkf/s2.jpg" alt="Zrzut ekranu aplikacji Tablica Kętrzyn: Fachowcy 2" loading="lazy"></a>
+                  -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Dół strony – bez większych zmian -->
+        <section class="card">
+          <h3>Nowości i plany</h3>
+          <p>To dopiero początek. Wkrótce dodam blog z aktualnościami, changelogiem i zapowiedziami kolejnych gier oraz funkcji w aplikacjach.</p>
+        </section>
+
+        <footer>
+          © <span id="year"></span> MR Zgredzio •
+          <!-- WAŻNE: link do app-ads.txt zostaje bez zmian ścieżki -->
+          <a class="accent" href="/app-ads.txt">app-ads.txt</a>
+        </footer>
       </div>
-    </header>
 
-    <nav style="margin-top:12px;display:flex;gap:14px;flex-wrap:wrap">
-      <a href="/" class="btn">Start</a>
-      <a href="/o-projekcie.html" class="btn">O projekcie</a>
-      <a href="/aktualnosci.html" class="btn">Aktualności</a>
-      <a href="/polityka-prywatnosci.html" class="btn">Polityka prywatności</a>
-      <a href="/kontakt.html" class="btn">Kontakt</a>
-    </nav>
-
-    <!-- Ś R O D E K: dwa okna -->
-    <section class="card">
-      <div class="twocol">
-        <!-- LEWE OKNO: GRA (bez zmian + QR) -->
-        <div class="pane" id="pane-game">
-          <h2>MR Block Breaker</h2>
-          <p>Arkadówka typu brick breaker. Rozwalaj klocki, zbieraj bonusy i wskakuj na kolejne poziomy.</p>
-
-          <div class="row">
-            <a id="playLink" class="btn btn--combo" target="_blank" rel="noopener" aria-label="Otwórz w Google Play">
-              <img src="img/google-play-badge.png" alt="Pobierz w Google Play" class="badge" loading="lazy">
-              <span class="label">Otwórz w Google Play</span>
-            </a>
-            <span style="flex:1"></span>
-            <span id="qrcode" class="qr" aria-label="Kod QR do pobrania gry"></span>
-          </div>
-
-          <div class="gallery" id="gallery-game">
-            <a href="img/screen/s1.jpg"><img src="img/screen/s1.jpg" alt="Zrzut ekranu 1" loading="lazy"></a>
-            <a href="img/screen/s2.jpg"><img src="img/screen/s2.jpg" alt="Zrzut ekranu 2" loading="lazy"></a>
-            <a href="img/screen/s3.jpg"><img src="img/screen/s3.jpg" alt="Zrzut ekranu 3" loading="lazy"></a>
-            <a href="img/screen/s4.jpg"><img src="img/screen/s4.jpg" alt="Zrzut ekranu 4" loading="lazy"></a>
-            <a href="img/screen/s5.jpg"><img src="img/screen/s5.jpg" alt="Zrzut ekranu 5" loading="lazy"></a>
-          </div>
-        </div>
-
-        <!-- PRAWE OKNO: REDBUBBLE -->
-        <div class="pane" id="pane-rb">
-          <h2>Redbubble</h2>
-          <p>Moje grafiki i merch. Zobacz sklep i nowości.</p>
-
-          <div class="row">
-            <a id="rbLink" class="btn btn--combo" target="_blank" rel="noopener" aria-label="Otwórz sklep Redbubble">
-              <svg class="badge" viewBox="0 0 64 64" aria-hidden="true">
-                <circle cx="32" cy="32" r="30" fill="#e11d48"/>
-                <text x="32" y="39" text-anchor="middle" font-size="26" font-family="Inter, Arial, sans-serif" fill="#fff" font-weight="700">RB</text>
-              </svg>
-              <span class="label">Otwórz sklep Redbubble</span>
-            </a>
-          </div>
-          
-          <!-- podgląd kolekcji (zrzut ze sklepu) -->
-          <div style="margin-top:14px">
-            <h4 style="margin:0 0 8px;font-size:16px;color:var(--muted)">Podgląd kolekcji</h4>
-            <a href="https://www.redbubble.com/people/mr-zgredzio/shop" target="_blank" rel="noopener">
-              <img src="img/rb/preview.jpg" alt="Podgląd kolekcji Redbubble" style="width:100%;border-radius:12px;border:1px solid #334155">
-            </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- D O Ł  – bez zmian -->
-    <section class="card">
-      <h3>Nowości i plany</h3>
-      <p>To dopiero początek. Wkrótce dodam blog z aktualnościami, changelogiem i zapowiedziami kolejnych gier.</p>
-    </section>
-
-    <footer>© <span id="year"></span> MR Zgredzio • <a class="accent" href="/app-ads.txt">app-ads.txt</a></footer>
+      <!-- Menu boczne po prawej stronie -->
+      <aside class="side-nav" aria-label="Nawigacja główna">
+        <div class="side-nav-title">Nawigacja</div>
+        <nav>
+          <!-- WAŻNE: Ścieżki linków zostają dokładnie takie jak były -->
+          <a href="/" class="btn">Start</a>
+          <a href="/o-projekcie.html" class="btn">O projekcie</a>
+          <a href="/aktualnosci.html" class="btn">Aktualności</a>
+          <a href="/polityka-prywatnosci.html" class="btn">Polityka prywatności</a>
+          <a href="/kontakt.html" class="btn">Kontakt</a>
+        </nav>
+      </aside>
+    </div>
   </div>
 
-  <!-- Lightbox -->
+  <!-- Lightbox do powiększania screenów -->
   <div id="lightbox" class="lb" hidden aria-hidden="true">
     <button class="lb__btn lb__close" aria-label="Zamknij">×</button>
     <button class="lb__btn lb__prev"  aria-label="Poprzednie">‹</button>
@@ -172,51 +429,87 @@
   </div>
 
   <script>
-    // Linki
-    const playUrl = "https://play.google.com/store/apps/details?id=com.mrzgredzio.mrblockbreaker";
-    const rbUrl   = "https://www.redbubble.com/people/mr-zgredzio/shop"; // <- PODMIEŃ NA SWÓJ SKLEP
+    // [NOWE] Linki do sklepów – tutaj nic nie zmieniamy w URL-ach, tylko ewentualnie podmieniasz samą wartość
+    const playUrl = "https://play.google.com/store/apps/details?id=com.mrzgredzio.mrblockbreaker"; // gra MR Block Breaker
+    const rbUrl   = "https://www.redbubble.com/people/mr-zgredzio/shop";                            // sklep Redbubble
 
+    // [NOWE] Adres aplikacji Tablica Kętrzyn: Fachowcy
+    // Na razie placeholder "#". Po publikacji aplikacji w Google Play podmień na prawdziwy link.
+    const tkfUrl  = "#"; // np. "https://play.google.com/store/apps/details?id=pl.mrzgredzio.tablicaketrzynfachowcy"
+
+    // Przypisanie linków do przycisków
     document.getElementById('playLink').href = playUrl;
     document.getElementById('rbLink').href   = rbUrl;
+    document.getElementById('tkfLink').href  = tkfUrl;
 
     document.addEventListener('DOMContentLoaded', () => {
-      // QR i rok
-      new QRCode(document.getElementById("qrcode"), {
-        text: playUrl, width: 120, height: 120, correctLevel: QRCode.CorrectLevel.M
-      });
+      // [NOWE] Ustawienie aktualnego roku w stopce
       document.getElementById('year').textContent = new Date().getFullYear();
 
-      // LIGHTBOX dla obu galerii
-      const thumbs = Array.from(document.querySelectorAll('#gallery-game a, #gallery-rb a'));
-      const lb = document.getElementById('lightbox');
-      const lbImg = lb.querySelector('img');
+      // Kod QR do gry MR Block Breaker (link jak wyżej)
+      if (window.QRCode) {
+        new QRCode(document.getElementById("qrcode"), {
+          text: playUrl,
+          width: 120,
+          height: 120,
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      }
+
+      // LIGHTBOX – obsługa miniatur z różnych galerii
+      // [NOWE] Dodaliśmy #gallery-tkf (TKF); #gallery-rb jest opcjonalny (na przyszłość).
+      const thumbs = Array.from(
+        document.querySelectorAll('#gallery-game a, #gallery-rb a, #gallery-tkf a')
+      );
+
+      const lb      = document.getElementById('lightbox');
+      const lbImg   = lb.querySelector('img');
       const btnClose = lb.querySelector('.lb__close');
       const btnPrev  = lb.querySelector('.lb__prev');
       const btnNext  = lb.querySelector('.lb__next');
 
       let idx = 0;
+
+      // Funkcja pokazująca wskazany zrzut ekranu w lightboxie
       function show(i){
+        if (!thumbs.length) return; // jeśli nie ma miniatur, to nic nie rób
         idx = (i + thumbs.length) % thumbs.length;
         lbImg.src = thumbs[idx].getAttribute('href');
         lb.removeAttribute('hidden');
         lb.setAttribute('aria-hidden','false');
       }
+
+      // Funkcja zamykająca lightbox
       function hide(){
         lb.setAttribute('hidden','');
         lb.setAttribute('aria-hidden','true');
         lbImg.src = '';
       }
 
-      thumbs.forEach((a, i) => a.addEventListener('click', e => { e.preventDefault(); show(i); }));
+      // Podpinamy kliknięcia pod miniatury
+      thumbs.forEach((a, i) => {
+        a.addEventListener('click', e => {
+          e.preventDefault();
+          show(i);
+        });
+      });
+
+      // Obsługa przycisków lightboxa
       btnClose.addEventListener('click', hide);
       btnPrev .addEventListener('click', () => show(idx - 1));
       btnNext .addEventListener('click', () => show(idx + 1));
-      lb.addEventListener('click', (e) => { if (e.target === lb) hide(); });
+
+      // Zamknięcie po kliknięciu w tło
+      lb.addEventListener('click', (e) => {
+        if (e.target === lb) hide();
+      });
+
+      // Skróty klawiaturowe (strzałki, Esc)
       document.addEventListener('keydown', (e) => {
         if (lb.hasAttribute('hidden')) return;
-        if (e.key === 'Escape') hide();
-        if (e.key === 'ArrowLeft')  show(idx - 1);
-        if (e.key === 'ArrowRight') show(idx + 1);
+        if (e.key === 'Escape')      hide();
+        if (e.key === 'ArrowLeft')   show(idx - 1);
+        if (e.key === 'ArrowRight')  show(idx + 1);
       });
     });
   </script>
