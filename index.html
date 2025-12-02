@@ -237,6 +237,32 @@
       border:1px solid rgba(15,23,42,.6);
       min-width:64px;
     }
+        /* [NOWE] Logo MR Zgredzio w prawym dolnym rogu ekranu */
+    .brand-logo-fixed{
+      position:fixed;          /* przyklejone do okna przeglądarki */
+      bottom:18px;             /* odsunięcie od dolnej krawędzi */
+      right:18px;              /* odsunięcie od prawej krawędzi */
+      width:120px;             /* szerokość na stronie (plik 1024x1384 zostanie przeskalowany) */
+      height:auto;             /* proporcje zachowane automatycznie */
+      z-index:900;             /* poniżej lightboxa (ten ma 1000), żeby podgląd screenów przykrywał logo */
+      opacity:0.92;            /* delikatnie przygaszone */
+      transition:transform .15s ease, opacity .15s ease;
+    }
+
+    .brand-logo-fixed:hover{
+      transform:scale(1.04);   /* lekkie powiększenie po najechaniu */
+      opacity:1;
+    }
+
+    /* [NOWE] Na mniejszych ekranach logo mniejsze lub można je wyłączyć */
+    @media (max-width:768px){
+      .brand-logo-fixed{
+        width:80px;            /* mniejsze logo na telefonach/tabletach */
+        bottom:12px;
+        right:12px;
+      }
+    }
+
 
     /* LIGHTBOX – jak wcześniej, ale bez zmian logiki */
     .lb{
@@ -524,5 +550,9 @@
       });
     });
   </script>
+   <!-- [NOWE] Logo MR Zgredzio w prawym dolnym rogu strony -->
+  <img src="img/logo-mr-zgredzio.png"
+       alt="Logo MR Zgredzio"
+       class="brand-logo-fixed">
 </body>
 </html>
